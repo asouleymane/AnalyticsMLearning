@@ -4,6 +4,7 @@ import pandas as pd
 from sklearn.naive_bayes import GaussianNB
 
 DATASET_TEST = '/dsa/data/all_datasets/titanic_ML/titanic.test.csv'
+OUTPUT_PATH = './'
 
 def check(model):
     if not os.path.exists(DATASET_TEST):
@@ -21,8 +22,9 @@ def check(model):
         raise Exception('Resulting prediction has wrong dimension. Expecting: (419,) Received:', prediction.shape)
 
 def snapshot(model):
-    os.system('mkdir -p datasets')
-    os.system('rm -rf datasets/*.npy')
+    os.system('mkdir -p %s' % OUTPUT_PATH)
+    os.system('rm -rf %s' % os.path.join(OUTPUT_PATH, '*.npy'))
     prediction = np.array(model.predict(pd.read_csv(DATASET_TEST)))
-    np.save('datasets/submission.npy', prediction, allow_pickle=False, fix_imports=True)
-    assert os.path.exists('datasets/submission.npy')
+    FNAME = os.path.join(OUTPUT_PATH, 'submission.npy')
+    np.save(FNAME, prediction, allow_pickle=False, fix_imports=True)
+    assert os.path.exists(FNAME)
